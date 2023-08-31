@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/csv"
+	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"math/rand"
@@ -43,6 +44,32 @@ func readTriadFromFile(filepath string) (triad [][3]string, err error) {
 		for j := range triad[i-1] {
 			triad[i-1][j] = lines[i][j]
 		}
+	}
+	return
+}
+
+func readTriadFromFileV1(filepath string) (triad [][3]string, err error) {
+	rawData, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		return
+	}
+
+	var lines = make([]*DeviceParamModel, 0)
+	err = json.Unmarshal(rawData, &lines)
+	if err != nil {
+		return
+	}
+
+	if len(lines) == 0 {
+		err = errors.New("empty triad")
+		return
+	}
+
+	triad = make([][3]string, len(lines))
+	for i := 0; i < len(lines); i++ {
+		triad[i][0] = lines[i].FogDn
+		triad[i][1] = lines[i].FogDs
+		triad[i][2] = lines[i].FogPk
 	}
 	return
 }

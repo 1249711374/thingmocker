@@ -64,7 +64,7 @@ type ThingJsonHeader struct {
 	Sys     struct {
 		Ack int `json:"ack"`
 	} `json:"sys"`
-	Method string `json:"method"`
+	Method    string `json:"method"`
 	Timestamp int64  `json:"timestamp"`
 }
 
@@ -86,4 +86,11 @@ type ThingJsonPropPost struct {
 type ThingJsonEventPost struct {
 	ThingJsonHeader
 	Params map[string]ThingJsonEventParam
+}
+
+type DeviceParamModel struct {
+	FogPk string `json:"fog_pk"`
+	FogDn string `json:"fog_dn"`
+	FogDs string `json:"fog_ds"`
+	FogPs string `json:"fog_ps"`
 }
