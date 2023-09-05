@@ -28,6 +28,7 @@ func readTriadFromFile(filepath string) (triads []Triad, err error) {
 	return
 }
 
+
 func StartMocker(ifaddr, filepath string, addStep, msgNum, duration, devNum int) {
 	Println("start mocking")
 	chDone := make(chan struct{}, 1)

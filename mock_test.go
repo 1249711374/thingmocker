@@ -49,3 +49,11 @@ func TestTransStrBytes(t *testing.T) {
 	log.Printf("%s, %v", rawStr, nBytes)
 
 }
+
+func TestReadFile(t *testing.T) {
+	triad, err := readTriadFromFile("/Users/projects/thingmocker/configs/triad1.csv")
+	log.Printf("triad:%v err:%s \n", triad, err)
+
+	triad, err = readTriadFromFileV1("/Users/gaohy/Downloads/93526e0c-209.txt")
+	log.Printf("triad:%v err:%s", triad, err)
+}
