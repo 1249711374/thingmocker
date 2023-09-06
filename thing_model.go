@@ -94,3 +94,20 @@ type DeviceParamModel struct {
 	FogDs string `json:"fog_ds"`
 	FogPs string `json:"fog_ps"`
 }
+
+type Voltmeter struct {
+	Properties []*Property `json:"properties"`
+}
+
+type Property struct {
+	Required   bool             `json:"required"`
+	Identifier string           `json:"identifier"`
+	Name       string           `json:"name"`
+	AccessMode string           `json:"accessMode"`
+	DataType   DataTypeProperty `json:"dataType"`
+}
+
+type DataTypeProperty struct {
+	Type  string            `json:"type"`
+	Specs map[string]string `json:"specs"`
+}

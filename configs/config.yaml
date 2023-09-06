@@ -4,7 +4,7 @@ defaults: &defaults
   # 设备上报消息速率，单位：条/秒
   MESSAGE_RATE: 1
   # 消息上报持续时间，单位：秒
-  MESSAGE_DURATION: 30000
+  MESSAGE_DURATION: 300000000000
 
   DEVICE_STEP_NUM: 10
   DEVICE_NUM: 10

@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"os"
 	"sync"
 )
 
@@ -32,20 +34,42 @@ func generateExampleProperties(id uint32, timestamp int64) []byte {
 			Version:   "1.0",
 			Timestamp: timestamp,
 		},
-		//Params: map[string]interface{}{
-		//	"Brightness": id,
-		//	"Current": id,
-		//	"BatteryPercentage": timestamp,
-		//},
-		Params: map[string]interface{}{
-			"AccumulatedChargePower":    3.356,
-			"AccumulatedDischargePower": 2.166,
-			"AllowedChargeCurrent":      6.766,
-		},
+		Params: generateParams(),
 	}
 
 	rawData, _ := json.Marshal(msg)
 	return rawData
+}
+
+func generateParams() map[string]interface{} {
+	params := make(map[string]interface{})
+
+	file, err := os.Open("./configs/local_E_TSL.json")
+	if err != nil {
+		fmt.Printf("err %s", err)
+		return nil
+	}
+
+	data, _ := io.ReadAll(file)
+
+	var properties Voltmeter
+	err = json.Unmarshal(data, &properties)
+	if err != nil {
+		fmt.Printf("err %s", err)
+		return nil
+	}
+
+	for _, property := range properties.Properties {
+		if property.DataType.Type == "double" || property.DataType.Type == "float" {
+			params[property.Identifier] = GenerateFloat()
+		} else if property.DataType.Type == "int" {
+			params[property.Identifier] = GenerateInt()
+		} else if property.DataType.Type == "text" {
+			params[property.Identifier] = fmt.Sprintf("'%s'", GenerateUUID(5))
+		}
+	}
+
+	return params
 }
 
 func generateExampleEvents(id uint32, timestamp int64) []byte {

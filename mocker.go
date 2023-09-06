@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
-	"math/rand"
 	"os"
 	"os/signal"
 	"sync"
@@ -161,7 +160,7 @@ func disconnectThingsConcurrency(things []*ThingMocker) {
 }
 
 func communicate(ctx context.Context, chDone chan struct{}, things []*ThingMocker, msgRate, duration, step int) {
-	tick := time.NewTicker(time.Minute)
+	tick := time.NewTicker(time.Second * 10)
 	endTimer := time.After(time.Second * time.Duration(duration))
 	Println("start thing communication mocking")
 loop:
@@ -186,7 +185,7 @@ func mockCommunicationsConcurrency(things []*ThingMocker, msgRate int) {
 		return
 	}
 
-	startIndex := rand.Int63n(int64(thingsNum))
+	//startIndex := rand.Int63n(int64(thingsNum))
 	commFn := func(index int) {
 		if err := things[index].PubProperties(); err != nil {
 			Debugf("thing[%s] PubProperties: %s", things[index], err)
@@ -196,17 +195,22 @@ func mockCommunicationsConcurrency(things []*ThingMocker, msgRate int) {
 	}
 
 	//endIndex := int(startIndex) + msgRate
-	endIndex := thingsNum
-	if endIndex > thingsNum {
-		for i := int(startIndex); i < thingsNum; i++ {
-			commFn(i)
-		}
-		for i := 0; i < endIndex-thingsNum; i++ {
-			commFn(i)
-		}
-	} else {
-		for i := int(startIndex); i < endIndex; i++ {
-			commFn(i)
-		}
+	//endIndex := thingsNum
+
+	for i := 0; i < thingsNum; i++ {
+		commFn(i)
 	}
+
+	//if endIndex > thingsNum {
+	//	for i := int(startIndex); i < thingsNum; i++ {
+	//		commFn(i)
+	//	}
+	//	for i := 0; i < endIndex-thingsNum; i++ {
+	//		commFn(i)
+	//	}
+	//} else {
+	//	for i := int(startIndex); i < endIndex; i++ {
+	//		commFn(i)
+	//	}
+	//}
 }
