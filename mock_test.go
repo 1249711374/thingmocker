@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -51,9 +53,10 @@ func TestTransStrBytes(t *testing.T) {
 }
 
 func TestReadFile(t *testing.T) {
-	triad, err := readTriadFromFile("/Users/projects/thingmocker/configs/triad1.csv")
-	log.Printf("triad:%v err:%s \n", triad, err)
 
-	triad, err = readTriadFromFileV1("/Users/gaohy/Downloads/93526e0c-209.txt")
-	log.Printf("triad:%v err:%s", triad, err)
+	for i := 0; i < 30; i++ {
+		startIndex := rand.Int63n(int64(10))
+		fmt.Println(startIndex)
+	}
+
 }

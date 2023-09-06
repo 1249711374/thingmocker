@@ -28,7 +28,6 @@ func readTriadFromFile(filepath string) (triads []Triad, err error) {
 	return
 }
 
-
 func StartMocker(ifaddr, filepath string, addStep, msgNum, duration, devNum int) {
 	Println("start mocking")
 	chDone := make(chan struct{}, 1)
@@ -102,7 +101,7 @@ func connThingsConcurrency(things []*ThingMocker) (successThings []*ThingMocker)
 		defer wg.Done()
 		err := thing.Conn()
 		if err != nil {
-			Printf("Conn: %s", err)
+			Printf("Conn: ipaddr:%s port:%d err:%s", Conf.MQTT_HOST, Conf.MQTT_PORT, err)
 			return
 		} else {
 			err = thing.SubDefaultTopics()
@@ -162,7 +161,7 @@ func disconnectThingsConcurrency(things []*ThingMocker) {
 }
 
 func communicate(ctx context.Context, chDone chan struct{}, things []*ThingMocker, msgRate, duration, step int) {
-	tick := time.NewTicker(time.Second)
+	tick := time.NewTicker(time.Minute)
 	endTimer := time.After(time.Second * time.Duration(duration))
 	Println("start thing communication mocking")
 loop:
@@ -196,7 +195,8 @@ func mockCommunicationsConcurrency(things []*ThingMocker, msgRate int) {
 		}
 	}
 
-	endIndex := int(startIndex) + msgRate
+	//endIndex := int(startIndex) + msgRate
+	endIndex := thingsNum
 	if endIndex > thingsNum {
 		for i := int(startIndex); i < thingsNum; i++ {
 			commFn(i)

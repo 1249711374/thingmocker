@@ -1,12 +1,13 @@
 version: "3"
 
 services:
-  thingmocker0: &defaults
-    build:
-      context: ../
-      dockerfile: ./deploy/Dockerfile
-    container_name: thingmocker0
-    command: ["thingmocker", "start", "-c", "/etc/thingmocker/config.yaml", "-e", "development"]
+  thingmocker:
+    image: local:thing_mocker
+    restart: unless-stopped
+    #container_name: deye_consumer
     volumes:
-      - ../configs/config.yaml:/etc/thingmocker/config.yaml
-      - ../configs/triad.csv:/etc/thingmocker/triad.csv
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /Users/projects/thingmocker/configs/config.yaml:/etc/thingmocker/config.yaml:ro
+      - /Users/projects/thingmocker/configs/local_triad.txt:/etc/thingmocker/local_triad.txt:ro
+    command: ["thingmocker", "-c", "/etc/thingmocker/config.yaml", "-e", "development","mock"]
