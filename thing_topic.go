@@ -45,7 +45,6 @@ const (
 	IndexThingPropertyPost = iota
 	IndexThingEventPost
 	IndexThingServiceReply
-	IndexThingPackDataPost
 	IndexThingTopoUplink
 	IndexThingShadowUplink
 	IndexThingNTPUplink

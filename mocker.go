@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"os/signal"
 	"sync"
@@ -55,6 +56,7 @@ func runMocker(ctx context.Context, chDone chan struct{}, ifaddr, filepath strin
 		triads = triads[:devNum]
 	}
 	things := initThingMockers(triads, ifaddr)
+
 	successList = connThingsByStep(ctx, things, addStep)
 
 	communicate(ctx, chDone, successList, msgNum, duration, addStep)
@@ -185,7 +187,7 @@ func mockCommunicationsConcurrency(things []*ThingMocker, msgRate int) {
 		return
 	}
 
-	//startIndex := rand.Int63n(int64(thingsNum))
+	startIndex := rand.Int63n(int64(thingsNum))
 	commFn := func(index int) {
 		if err := things[index].PubProperties(); err != nil {
 			Debugf("thing[%s] PubProperties: %s", things[index], err)
@@ -194,23 +196,40 @@ func mockCommunicationsConcurrency(things []*ThingMocker, msgRate int) {
 		}
 	}
 
-	//endIndex := int(startIndex) + msgRate
-	//endIndex := thingsNum
-
-	for i := 0; i < thingsNum; i++ {
-		commFn(i)
+	ntpFn := func(index int) {
+		if err := things[index].PubNTP(); err != nil {
+			Debugf("thing[%s] ntp: %s", things[index], err)
+		} else {
+			Debugf("thing[%s] ntp success", things[index])
+		}
 	}
 
-	//if endIndex > thingsNum {
-	//	for i := int(startIndex); i < thingsNum; i++ {
-	//		commFn(i)
-	//	}
-	//	for i := 0; i < endIndex-thingsNum; i++ {
-	//		commFn(i)
-	//	}
-	//} else {
-	//	for i := int(startIndex); i < endIndex; i++ {
-	//		commFn(i)
-	//	}
-	//}
+	endIndex := int(startIndex) + msgRate
+	if endIndex > thingsNum {
+		for i := int(startIndex); i < thingsNum; i++ {
+			if Conf.MESSAGE_ENABLE {
+				commFn(i)
+			}
+			if Conf.NTP_ENABLE {
+				ntpFn(i)
+			}
+		}
+		for i := 0; i < endIndex-thingsNum; i++ {
+			if Conf.MESSAGE_ENABLE {
+				commFn(i)
+			}
+			if Conf.NTP_ENABLE {
+				ntpFn(i)
+			}
+		}
+	} else {
+		for i := int(startIndex); i < endIndex; i++ {
+			if Conf.MESSAGE_ENABLE {
+				commFn(i)
+			}
+			if Conf.NTP_ENABLE {
+				ntpFn(i)
+			}
+		}
+	}
 }

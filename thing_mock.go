@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+
 	"hash"
 	"net"
 	"sync/atomic"
@@ -139,6 +140,12 @@ func (t *ThingMocker) PubProperties() error {
 	fmt.Printf("PubProperties: dn: %s time:%s \n", t.deviceName, time.Now().Format("2006-01-02 15:04:05"))
 	rawData := generateExampleProperties(t.getId(), time.Now().Unix())
 	return t.PubMsg(t.pubTopics[IndexThingPropertyPost], 0, rawData)
+}
+
+func (t *ThingMocker) PubNTP() error {
+	fmt.Printf("PubNTP: dn: %s time:%s \n", t.deviceName, time.Now().Format("2006-01-02 15:04:05"))
+	rawData := generateExampleNTP(t.getId(), time.Now().Unix())
+	return t.PubMsg(t.pubTopics[IndexThingNTPUplink], 0, rawData)
 }
 
 func (t *ThingMocker) PubEvents() error {

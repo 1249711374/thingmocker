@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"sync"
+	"time"
 )
 
 var (
@@ -41,10 +42,30 @@ func generateExampleProperties(id uint32, timestamp int64) []byte {
 	return rawData
 }
 
+func generateExampleNTP(id uint32, timestamp int64) []byte {
+	msg := ThingJsonPropPost{
+		ThingJsonHeader: ThingJsonHeader{
+			Id:        id,
+			Version:   "1.0",
+			Timestamp: timestamp,
+		},
+		Params: generateNTPParams(id),
+	}
+
+	rawData, _ := json.Marshal(msg)
+	return rawData
+}
+
+func generateNTPParams(id uint32) map[string]interface{} {
+	params := make(map[string]interface{})
+	params["device_send_time"] = time.Now().Unix()
+	return params
+}
+
 func generateParams() map[string]interface{} {
 	params := make(map[string]interface{})
 
-	file, err := os.Open("./configs/local_E_TSL.json")
+	file, err := os.Open(Conf.PROPERTY_FILEPATH)
 	if err != nil {
 		fmt.Printf("err %s", err)
 		return nil

@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -54,9 +52,8 @@ func TestTransStrBytes(t *testing.T) {
 
 func TestReadFile(t *testing.T) {
 
-	for i := 0; i < 30; i++ {
-		startIndex := rand.Int63n(int64(10))
-		fmt.Println(startIndex)
-	}
+	triads, err := readTriadFromFile("/Users/gaohy/Downloads/93526e0c-492-496.txt")
+	log.Printf("err:%s \n", err)
+	log.Println(triads)
 
 }

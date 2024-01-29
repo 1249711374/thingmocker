@@ -45,7 +45,6 @@ var (
 	ifaddr              string
 )
 
-
 func init() {
 	mockCmd.Flags().StringVarP(&configEnv, "env", "e", "defaults", "config env")
 	mockCmd.Flags().StringVarP(&configPath, "config", "c", "/app/thingmocker/config.yaml", "config file path")
@@ -80,6 +79,9 @@ type ConfigData struct {
 	DEVICE_STEP_NUM       int    `mapstructure:"device_step_num"`
 	DEVICE_NUM            int    `mapstructure:"device_num"`
 	DEVICE_TRIAD_FILEPATH string `mapstructure:"device_triad_filepath"`
+	PROPERTY_FILEPATH     string `mapstructure:"property_filepath"`
+	MESSAGE_ENABLE        bool   `mapstructure:"message_enable"`
+	NTP_ENABLE            bool   `mapstructure:"ntp_enable"`
 }
 
 func loadConfig() {

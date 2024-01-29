@@ -1,19 +1,26 @@
 defaults: &defaults
-  MQTT_HOST: app.mqtt.fogcloud.io
-  MQTT_PORT: 1883
+  MQTT_HOST: pre-mqtt.fogcloud.io
+  MQTT_PORT: 21883
   # 设备上报消息速率，单位：条/秒
   MESSAGE_RATE: 1
   # 消息上报持续时间，单位：秒
-  MESSAGE_DURATION: 300000000000
+  MESSAGE_DURATION: 30000
+  # 消息上报 开启测试
+  MESSAGE_ENABLE: true
 
-  DEVICE_STEP_NUM: 10
-  DEVICE_NUM: 10
+  # 设备时间校验 开启测试
+  NTP_ENABLE: true
+  DEVICE_STEP_NUM: 1
+  DEVICE_NUM: 1
 #  DEVICE_TRIAD_FILEPATH: /etc/thingmocker/local_triad.txt
+#  PROPERTY_FILEPATH: /opt/fogcloud_pet/local_E_TSL.json
+#  DEVICE_TRIAD_FILEPATH: /opt/fogcloud_pet/local_triad.txt
+  PROPERTY_FILEPATH: ./configs/local_E_TSL.json
   DEVICE_TRIAD_FILEPATH: ./configs/local_triad.txt
 
 development:
   <<: *defaults
-  MQTT_HOST: app.mqtt.fogcloud.io
-  MQTT_PORT: 1883
-#  DEVICE_TRIAD_FILEPATH: /etc/thingmocker/local_triad.txt
-  DEVICE_TRIAD_FILEPATH: ./configs/local_triad.txt
+  MQTT_HOST: pre-mqtt.fogcloud.io
+  MQTT_PORT: 21883
+  PROPERTY_FILEPATH: ./configs/local_E_TSL.json
+  DEVICE_TRIAD_FILEPATH: ./configs/local_triad.json

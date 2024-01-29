@@ -4,10 +4,10 @@ services:
   thingmocker:
     image: local:thing_mocker
     restart: unless-stopped
-    #container_name: deye_consumer
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
       - /Users/projects/thingmocker/configs/config.yaml:/etc/thingmocker/config.yaml:ro
       - /Users/projects/thingmocker/configs/local_triad.txt:/etc/thingmocker/local_triad.txt:ro
+      - /Users/projects/thingmocker/configs/local_E_TSL.json:/etc/thingmocker/local_E_TSL.json:ro
     command: ["thingmocker", "-c", "/etc/thingmocker/config.yaml", "-e", "development","mock"]
