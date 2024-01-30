@@ -162,7 +162,7 @@ func disconnectThingsConcurrency(things []*ThingMocker) {
 }
 
 func communicate(ctx context.Context, chDone chan struct{}, things []*ThingMocker, msgRate, duration, step int) {
-	tick := time.NewTicker(time.Second * 10)
+	tick := time.NewTicker(time.Second)
 	endTimer := time.After(time.Second * time.Duration(duration))
 	Println("start thing communication mocking")
 loop:
